@@ -1,0 +1,22 @@
+module or_test;
+reg a,b;
+wire y;
+or_gate DUT1(.a(a),
+             .b(b),
+             .y(y));
+
+initial begin
+$dumpfile("dump.vcd");
+$dumpvars;
+
+a=$random;
+b=$random;
+end
+
+initial forever #3 a=~a;
+initial forever #2 b=~b;
+initial begin $monitor("a=%b,b=%b,y=%b",a,b,y);
+#20 $finish;
+end
+
+endmodule

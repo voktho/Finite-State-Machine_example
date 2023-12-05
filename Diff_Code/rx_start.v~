@@ -1,0 +1,46 @@
+module rx_control(input clk,
+                  input rstn,
+input rx_start,
+input clk_count_eql_5,
+input bit_count_eql_5,
+output clk_count_clear,
+output bit_count_clear,
+output bit_count_incr,
+output shift_en,
+output frame_err_gen);
+
+reg [1:0] pstate,nstate;
+parameter [1:0] IDLE=2'b00,WAIT=2'b01,SHIFT=2'b10,CHECK=2'b11;
+
+
+
+//nextstate
+
+always(*)
+
+begin:NSL
+casez(pstate)
+IDLE: nstate=rx_start?WAIT:IDLE;
+WAIT: nstate=clk_count_eql_5?SHIFT:WAIT;
+SHIFT: nstate=bit_count_eql_5?CHECK:WAIT;
+CHECK: nstate=IDLE;
+DEFAULT: nstate='bx;
+
+
+end
+
+
+//pstate
+
+always @(posedge clk,negedge rstn)
+begin
+if(!rstn)
+pstate<=IDLE;
+else
+pstate<=nstate;
+end
+
+
+
+
+endmodule

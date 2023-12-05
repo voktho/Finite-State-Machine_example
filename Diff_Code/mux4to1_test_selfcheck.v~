@@ -1,0 +1,29 @@
+module mux4to1_test_selfcheck;
+  reg [3:0]W;
+  reg [1:0]S;
+  wire f;
+  mux4to1 DUT(.W(W),
+              .S(S),
+              .f(f));
+  
+  initial begin
+    W=4'b1110;
+    S=2'b00; #5;
+    if(f!=0) $display("Failed At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    else $display("Correct At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    S=2'b01;
+    W=~W; #5;
+    if(f!=1) $display("Failed At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    else $display("Correct At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    S=2'b10;
+    W=W; #5;
+    if(f!=1) $display("Failed At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    else $display("Correct At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    S=2'b11;
+    W=~W; #5;
+    if(f!=0) $display("Failed At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    else $display("Correct At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    
+  end
+
+endmodule

@@ -1,0 +1,22 @@
+Module divideby3FSM(input clk, 
+ Input reset
+ Output out);
+Reg [2:0] state, nextstate;
+parameter S0 = 2’b00;
+parameter S1 = 2’b01;
+parameter S2 = 2’b10;
+//state register
+always @posedge clk, reset)
+if (reset) state <=S0;
+else state <=nextstate;
+//next state logic
+always @ (*)
+case (state)
+S0: nextstate <= S1;
+S1: nextstate <= S2;
+S2: nextstate <= S0;
+default: nextstate <= S0;
+endcase;
+//output logic
+assign out = (state ==S2);
+endmodule

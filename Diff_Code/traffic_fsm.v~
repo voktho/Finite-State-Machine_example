@@ -1,0 +1,100 @@
+module traffic_fsm(input clk,
+input rstn,
+input start,
+input Red_count_eql2,
+input Yellow_count_eql1,
+input Green_count_eql4,
+output reg Red_count_clear,
+output reg Yellow_count_clear,
+output reg Green_count_clear,
+output reg Red_out,
+output reg Yellow_out,
+output reg Green_out);
+
+reg forward_d;
+
+reg [1:0] nstate,pstate;
+parameter [1:0] IDLE=2'b00,Red=2'b01,Yellow=2'b10,Green=2'b11;
+
+
+//nstate
+always @(*)
+begin
+casez(pstate)
+IDLE: nstate=start?Red:IDLE;
+Red: begin
+nstate=Red_count_eql2?Yellow:Red;
+ forward_d=1;
+end
+Yellow:begin if(forward_d)
+nstate=Yellow_count_eql1?Green:Yellow;
+else 
+nstate=Yellow_count_eql1?Red:Yellow;
+end
+Green: begin 
+nstate=Green_count_eql4?Yellow:Green;
+forward_d=0;
+end
+endcase
+
+end
+
+
+//pstate
+
+always @(posedge clk,negedge rstn)
+begin
+if(!rstn) begin
+pstate <=IDLE;
+forward_d<=1;
+end
+else
+pstate<=nstate;
+end
+
+//output
+
+always @(*)
+begin
+casez(pstate)
+IDLE:begin
+Red_count_clear=1;
+Yellow_count_clear=1;
+Green_count_clear=1;
+Red_out=0;
+Yellow_out=0;
+Green_out=0;
+end
+
+Red:begin
+Red_count_clear=0;
+Yellow_count_clear=1;
+Green_count_clear=1;
+Red_out=1;
+Yellow_out=0;
+Green_out=0;
+end
+
+Yellow:begin
+Red_count_clear=1;
+Yellow_count_clear=0;
+Green_count_clear=1;
+Red_out=0;
+Yellow_out=1;
+Green_out=0;
+end
+
+Green:begin
+Red_count_clear=1;
+Yellow_count_clear=1;
+Green_count_clear=0;
+Red_out=0;
+Yellow_out=0;
+Green_out=1;
+end
+
+endcase
+end
+
+endmodule
+

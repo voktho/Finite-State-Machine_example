@@ -1,0 +1,35 @@
+module dividedby3_self_test;
+reg clk,reset;
+wire out;
+
+divideby3FSM Dut1(.clk(clk),
+                   .reset(reset),
+                   .out(out));
+
+initial begin
+clk=0;
+reset=1;
+
+$dumpfile("dump.vcd");
+$dumpvars;
+end
+
+always #1 clk = ~clk;
+
+initial begin
+#5 reset=0; $display("out=%d",out);
+#5 reset=1;
+if(out=!0) $display("Failed");
+else $display("Correct out=%d",out);
+#5 reset=0; 
+if(out!=1) $display("Failed");
+else $display("out=%d",out);
+#5 reset=1; 
+if(out) $display("Failed");
+else $display("out=%d",out);
+end
+
+ initial #20 $finish;
+
+
+endmodule

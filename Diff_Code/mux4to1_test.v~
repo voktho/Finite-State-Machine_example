@@ -1,0 +1,35 @@
+module mux4to1_test_selfcheck;
+  reg [3:0]W;
+  reg [1:0]S;
+  wire f;
+  mux4to1 DUT(.W(W),
+              .S(S),
+              .f(f));
+  
+  always begin
+    W=$random;
+    S=2'b00;
+    #5 S=2'b01;
+     W=~W;
+    #5 S=2'b10;
+     W=W;
+    #5 S=2'b11;
+     W=~W;
+    #5;
+    
+  end
+  
+  initial begin
+    $monitor("At time:%d S=%b,W=%b,f=%b",$time,S,W,f);
+    #35 $finish;
+    
+  end
+  
+  initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(1); 
+  end
+
+endmodule
+
+

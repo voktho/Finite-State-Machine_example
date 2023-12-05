@@ -1,0 +1,33 @@
+module dividedby3_test;
+reg clk,reset;
+reg [2:1] y,Y;
+wire out;
+
+dividedby3FSM Dut1(.clk(clk),
+                   .reset(reset),
+                   .out(out));
+
+initial begin
+clk=0;
+reset=1;
+
+$dumpfile("dump.vcd");
+$dumpvars;
+end
+
+always begin
+#2 clk = ~clk;
+#5 reset = ~reset;
+end
+
+initial begin
+$display("Output: %d",out);
+#30 $finish;
+
+end
+
+
+
+
+
+endmodule

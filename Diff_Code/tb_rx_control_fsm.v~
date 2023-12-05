@@ -1,0 +1,81 @@
+module tb_rx_control_fsm;
+reg clk;
+reg rstn;
+reg rx_start;
+reg clk_count_eql_4;
+reg bit_count_eql_4;
+wire clk_count_clear;
+wire bit_count_clear;
+wire bit_count_incr;
+wire shift_en;
+wire frame_err_gen;
+
+rx_control_FSM dut(.clk(clk),
+.rstn(rstn),
+.rx_start(rx_start),
+.clk_count_eql_4(clk_count_eql_4),
+.bit_count_eql_4(bit_count_eql_4),
+.clk_count_clear(clk_count_clear),
+.bit_count_clear(bit_count_clear),
+.bit_count_incr(bit_count_incr),
+.shift_en(shift_en),
+.frame_err_gen(frame_err_gen)
+);
+
+  
+  initial begin
+    
+    $dumpfile("dump.vcd");
+    $dumpvars(1);
+    
+    
+    clk=1;
+c
+
+    
+  
+    #10 rstn=1;
+
+    rx_start=1;
+
+      
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 bit_count_eql_4=1;
+    
+    #10;
+    rstn=0;
+    clk_count_eql_4=0;
+    bit_count_eql_4=0;
+    rx_start=0;
+    
+      
+    #10 rstn=1;
+
+    rx_start=1;
+
+      
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 clk_count_eql_4=1;
+    #50 bit_count_eql_4=1;
+    
+    
+    
+    
+    end
+
+   
+  
+  always #5 clk=~clk;
+                
+  initial #1000 $finish;
+  
+
+
+endmodule

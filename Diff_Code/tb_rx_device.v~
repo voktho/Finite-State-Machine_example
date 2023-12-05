@@ -1,0 +1,48 @@
+module tb_rx_device;
+
+reg clk,
+reg rstn,
+reg rx_start,
+reg rx_data,
+wire frame_err;
+
+
+rx_device dut(.clk(clk),
+.rstn(rstn),
+.rx_start(rx_start),
+.rx_data(rx_data),
+.frame_err(frame_err)
+);
+
+initial begin
+
+clk=1;
+rstn=0;
+rx_start=0;
+rx_data=0;
+
+#10;
+rstn=1;
+rx_start=1;
+rx_data=0;
+
+#50 rx_data=1;
+#50 rx_data=0;
+#50 rx_data=1;
+#50 rx_data=0;
+#50 rx_data=1;
+#50 rx_data=0;
+#50 rx_data=1;
+#50 rx_data=1;
+
+
+#200 $finsih;
+
+
+
+
+end
+
+
+
+endmodule

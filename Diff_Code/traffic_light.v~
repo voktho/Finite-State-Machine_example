@@ -1,0 +1,67 @@
+module traffic_light(input clk,
+input rstn,
+input start,
+output Red,
+output Yellow,
+output Green);
+
+wire [2:0] Red_count,Yellow_count,Green_count;
+
+reg Red_count_eql2,Yellow_count_eql1,Green_count_eql4,Red_count_clear,Yellow_count_clear,Green_count_clear;
+
+traffic_fsm  dut_fsm(.clk(clk),
+.rstn(rstn),
+.start(start),
+.Red_count_eql2(Red_count_eql2),
+.Yellow_count_eql1(Yellow_count_eql1),
+.Green_count_eql4(Green_count_eql4),
+.Red_count_clear(Red_count_clear),
+.Yellow_count_clear(Yellow_count_clear),
+.Green_count_clear(Green_count_clear),
+.Red_out(Red),
+.Yellow_out(Yellow),
+.Green_out(Green)
+);
+
+
+counter Red_count_dut(.clk(clk),
+.rstn(rstn),
+.clear(Red_count_clear),
+.incr('d1),
+.count(Red_count)
+);
+
+
+counter Yellow_count_dut(.clk(clk),
+.rstn(rstn),
+.clear(Yellow_count_clear),
+.incr('d1),
+.count(Yellow_count)
+);
+
+counter Green_count_dut(.clk(clk),
+.rstn(rstn),
+.clear(Green_count_clear),
+.incr('d1),
+.count(Green_count)
+);
+
+
+comparator Red_dut(.val(Red_count),
+.comp_with(3'b010),
+.comp(Red_count_eql2)
+);
+
+comparator Yellow_dut(.val(Yellow_count),
+.comp_with(3'b001),
+.comp(Yellow_count_eql1)
+);
+
+comparator Green_dut(.val(Green_count),
+.comp_with(3'b100),
+.comp(Green_count_eql4)
+);
+
+
+
+endmodule
